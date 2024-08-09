@@ -3,11 +3,11 @@ from model.F_Kine import cal_eepose
 import plotly.graph_objects as go
 import pandas as pd
 
-data1 = pd.read_csv('data/pos1.csv')
+data1 = pd.read_csv('data/粒子群算法优化后的抛物线轨迹.csv')
 pos1 = [data1['X'].values, data1['Y'].values, data1['Z'].values, data1['RX'].values, data1['RY'].values, data1['RZ'].values]
 pos1 = np.array(pos1).T
 
-data2 = pd.read_csv('data/pos2.csv')
+data2 = pd.read_csv('data/机械臂自带程序轨迹.csv')
 pos2 = [data2['X'].values, data2['Y'].values, data2['Z'].values, data2['RX'].values, data2['RY'].values, data2['RZ'].values]
 pos2 = np.array(pos2).T
 
@@ -66,8 +66,8 @@ scatter3 = go.Scatter3d(
         opacity=0.8
                 )
 )
-fig = go.Figure(data=[scatter3,scatter2, scatter])
-
+# fig = go.Figure(data=[scatter3,scatter2, scatter])
+fig = go.Figure(data=[scatter2, scatter])
 # 创建半透明的3D平面
 planes = [
     go.Surface(x=[[x_min, x_max], [x_min, x_max]], y=[[y_min, y_min], [y_max, y_max]], z=[[z_min, z_min], [z_min, z_min]], showscale=False, opacity=0.2, colorscale=[(0, 'blue'), (1, 'blue')]),
