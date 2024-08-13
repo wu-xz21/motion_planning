@@ -16,7 +16,7 @@ from utils import pso_para as pso
 connect(use_gui=True)
 # p.setAdditionalSearchPath(pybullet_data.getDataPath())
 # _ = p.loadURDF('plane.urdf')
-robot_id = p.loadURDF("./urdf_file/dazu.urdf",
+robot_id = p.loadURDF("urdf_files/dazu.urdf",
                       basePosition=[0, 0, 0], useFixedBase=True, flags=p.URDF_USE_SELF_COLLISION)
 # 定义障碍物
 obstacle = create_box(0.2,0.2,0.6, color=BLUE)

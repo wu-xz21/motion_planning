@@ -1,29 +1,28 @@
 import numpy as np
-from model.F_Kine import cal_eepose
 import plotly.graph_objects as go
 import pandas as pd
 
+
+col_labels = ['X', 'Y', 'Z', 'RX', 'RY', 'RZ']
 data1 = pd.read_csv('data/粒子群算法优化后的抛物线轨迹.csv')
-pos1 = [data1['X'].values, data1['Y'].values, data1['Z'].values, data1['RX'].values, data1['RY'].values, data1['RZ'].values]
+pos1 = [data1[col].values for col in col_labels]
 pos1 = np.array(pos1).T
 
 data2 = pd.read_csv('data/机械臂自带程序轨迹.csv')
-pos2 = [data2['X'].values, data2['Y'].values, data2['Z'].values, data2['RX'].values, data2['RY'].values, data2['RZ'].values]
+pos2 = [data2[col].values for col in col_labels]
 pos2 = np.array(pos2).T
 
-data3 = pd.read_csv('data/data.csv')
-J3 = [data3['J1'].values, data3['J2'].values, data3['J3'].values, data3['J4'].values, data3['J5'].values, data3['J6'].values]
-J3 = np.array(J3).T
-pos3 = np.zeros(J3.shape)
-for i in range(len(pos3)):
-    pos3[i] = cal_eepose(J3[i])
+data3 = pd.read_csv('data/order.csv',encoding='utf-8')
+pos3 = [data3[col].values for col in col_labels]
+pos3 = np.array(pos3).T
 
 
 # 绘制工作空间
 # 使用你的数据
 x1, y1, z1 = pos1[:, 0], pos1[:, 1], pos1[:, 2]
 x2, y2, z2 = pos2[:, 0], pos2[:, 1], pos2[:, 2]
-x3, y3, z3 = pos3[:, 0], pos3[:, 1], pos3[:, 2]
+x3, y3, z3 = pos3[[28,29,30,42], 0], pos3[[28,29,30,42], 1], pos3[[28,29,30,42], 2]
+
 # 计算x, y, z方向的最小值和最大值
 x_min, x_max = np.min(x1), np.max(x1)
 y_min, y_max = np.min(y1), np.max(y1)
@@ -61,13 +60,12 @@ scatter3 = go.Scatter3d(
     mode='markers',
     marker=dict(
         size=6,
-        color=-z3,  # 设置颜色为z轴的值
-        colorscale='Viridis',  # 选择一种颜色映射
+        color='blue',  # 设置颜色为z轴的值
         opacity=0.8
-                )
+    )
 )
-# fig = go.Figure(data=[scatter3,scatter2, scatter])
-fig = go.Figure(data=[scatter2, scatter])
+
+fig = go.Figure(data=[scatter,scatter2, scatter3])
 # 创建半透明的3D平面
 planes = [
     go.Surface(x=[[x_min, x_max], [x_min, x_max]], y=[[y_min, y_min], [y_max, y_max]], z=[[z_min, z_min], [z_min, z_min]], showscale=False, opacity=0.2, colorscale=[(0, 'blue'), (1, 'blue')]),
@@ -87,13 +85,11 @@ D[3] = [61.77036667,-480.4981384,445.8680725,179.2924194,1.417901039,45.00098801
 scatter_d = go.Scatter3d(
     x=D[:, 0],
     y=D[:, 1],
-    z=D[:, 2]-2,
-    mode='markers',
-    marker=dict(
-        size=6,
-        color='red',  # 设置颜色为红色
-        colorscale='Viridis',  # 选择一种颜色映射
-        opacity=0.8
+    z=D[:, 2],
+    mode='lines',
+    line=dict(
+        color='red',
+        width=10
     )
 )
 
